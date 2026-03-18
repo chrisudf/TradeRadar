@@ -146,54 +146,58 @@ def get_current_price(ticker):
 def get_earnings_info(stock):
     """
     获取财报日期和时间（BMO/AMC）。
+    使用 stock.info 的 earningsTimestamp 字段，比 calendar 更准确。
+
     返回: (earnings_date, earnings_time, confirmed)
       earnings_date : datetime.date 或 None
       earnings_time : 'BMO' / 'AMC' / 'Unknown'
-      confirmed     : True = yfinance 有明确日期，False = 无法确认
+      confirmed     : True = 日期已确认，False = 估算日期
     """
     try:
-        cal = stock.calendar
-        if cal is None or cal.empty:
+        info = stock.info
+        if not info:
             return None, 'Unknown', False
 
-        # calendar 返回 DataFrame，列名可能是 'Earnings Date' 或索引
-        if 'Earnings Date' in cal.columns:
-            raw = cal['Earnings Date'].dropna()
-        elif 'Earnings Date' in cal.index:
-            raw = cal.loc['Earnings Date']
-            if not hasattr(raw, '__iter__'):
-                raw = [raw]
+        # ── 财报日期：用 earningsTimestamp 转美东时间，避免时区偏差 ──
+        ts = info.get('earningsTimestamp') or info.get('earningsTimestampStart')
+        if not ts:
+            return None, 'Unknown', False
+
+        import pytz
+        et_tz   = pytz.timezone('America/New_York')
+        dt_et   = datetime.fromtimestamp(ts, tz=et_tz)
+        edate   = dt_et.date()
+        hour_et = dt_et.hour
+
+        # ── BMO / AMC 判断：美东时间 ──
+        # 盘前公布通常在 4:00-9:30（hour < 9 或 hour == 9 且 minute < 30）
+        # 盘后公布通常在 16:00 之后（hour >= 16）
+        if hour_et < 10:
+            etime = 'BMO'
+        elif hour_et >= 16:
+            etime = 'AMC'
         else:
-            return None, 'Unknown', False
+            etime = 'Unknown'
 
-        if len(raw) == 0:
-            return None, 'Unknown', False
+        # ── 是否为估算日期 ──
+        confirmed = not info.get('isEarningsDateEstimate', True)
 
-        # 取第一个日期
-        val = list(raw)[0]
-        if hasattr(val, 'date'):
-            edate = val.date()
-        else:
-            edate = datetime.strptime(str(val)[:10], "%Y-%m-%d").date()
-
-        # 判断 BMO / AMC：yfinance 有时返回两个日期（开盘前/收盘后范围）
-        # 若有第二个日期且与第一个相差1天，说明是跨日的 AMC
-        etime = 'Unknown'
-        if len(raw) >= 2:
-            val2 = list(raw)[1]
-            if hasattr(val2, 'date'):
-                edate2 = val2.date()
-            else:
-                edate2 = datetime.strptime(str(val2)[:10], "%Y-%m-%d").date()
-            delta = (edate2 - edate).days
-            if delta == 0:
-                etime = 'BMO'   # 同一天，盘前
-            elif delta == 1:
-                etime = 'AMC'   # 跨天，盘后
-        return edate, etime, True
+        return edate, etime, confirmed
 
     except Exception:
-        return None, 'Unknown', False
+        # 降级：尝试从 calendar dict 读取
+        try:
+            cal = stock.calendar
+            if not cal or 'Earnings Date' not in cal:
+                return None, 'Unknown', False
+            dates = cal['Earnings Date']
+            if not dates:
+                return None, 'Unknown', False
+            val = dates[0]
+            edate = val if isinstance(val, type(datetime.today().date())) else val.date() if hasattr(val, 'date') else datetime.strptime(str(val)[:10], "%Y-%m-%d").date()
+            return edate, 'Unknown', False
+        except Exception:
+            return None, 'Unknown', False
 
 
 def compute_recommendation(ticker_symbol):
