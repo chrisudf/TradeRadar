@@ -18,6 +18,7 @@ import sys
 import io
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+import os
 
 # 强制 stdout/stderr 使用 UTF-8，避免 Windows cmd 编码报错
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
@@ -26,9 +27,9 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='repla
 # ══════════════════════════════════════════════════════════════
 #  📧  邮件配置  —  请修改以下三行
 # ══════════════════════════════════════════════════════════════
-EMAIL_SENDER   = "chengqiu03@gmail.com"    # 发件人（你自己的 Gmail）
-EMAIL_PASSWORD = "itzz vmar gzih tlbr"         # Gmail 应用专用密码（16位）
-EMAIL_RECEIVER = "chengqiu03@gmail.com"  # 收件人（可以和发件人相同）
+EMAIL_SENDER   = os.environ.get('EMAIL_SENDER', '')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')  # Gmail 应用专用密码（16位）
+EMAIL_RECEIVER = os.environ.get('EMAIL_RECEIVER', '')
 # ══════════════════════════════════════════════════════════════
 
 # ── S&P 500 成分股 ─────────────────────────────────────────────────────────────
