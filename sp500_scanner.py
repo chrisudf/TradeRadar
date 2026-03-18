@@ -210,7 +210,7 @@ def compute_recommendation(ticker_symbol):
 
 # ── 批量扫描 ──────────────────────────────────────────────────────────────────
 
-def scan_all(tickers=SP500, max_workers=8):
+def scan_all(tickers=SP500, max_workers=4):
     results_all = []
     errors      = []
     passed      = []
@@ -221,11 +221,15 @@ def scan_all(tickers=SP500, max_workers=8):
     print(f"  扫描条件：avg_volume ✓  iv30_rv30 ✓  ts_slope_0_45 ✓")
     print(f"{'='*60}\n")
 
-    def _worker(sym):
-        try:
-            return sym, compute_recommendation(sym), None
-        except Exception as e:
-            return sym, None, str(e)
+    def _worker(sym, retries=2):
+        for attempt in range(retries + 1):
+            try:
+                return sym, compute_recommendation(sym), None
+            except Exception as e:
+                if attempt < retries:
+                    time.sleep(2 * (attempt + 1))  # 第1次等2秒，第2次等4秒
+                else:
+                    return sym, None, str(e)
 
     completed = 0
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
