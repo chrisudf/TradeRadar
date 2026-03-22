@@ -32,57 +32,96 @@ EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')  # Gmail 应用专用密�
 EMAIL_RECEIVER = os.environ.get('EMAIL_RECEIVER', '')
 # ══════════════════════════════════════════════════════════════
 
-# ── S&P 500 成分股 ─────────────────────────────────────────────────────────────
-SP500 = [
-    "MMM", "AOS", "ABT", "ABBV", "ACN", "ADBE", "AMD", "AES", "AFL", "A",
-    "APD", "ABNB", "AKAM", "ALB", "ARE", "ALGN", "ALLE", "LNT", "ALL", "GOOGL",
-    "GOOG", "MO", "AMZN", "AMCR", "AMP", "AME", "AMGN", "APH", "ADI", "ANSS",
-    "AON", "APA", "AAPL", "AMAT", "APTV", "ACGL", "ADM", "ANET", "AJG", "AIZ",
-    "T", "ATO", "ADSK", "ADP", "AZO", "AVB", "AVY", "AXON", "BKR", "BALL",
-    "BAC", "BK", "BBWI", "BAX", "BDX", "WRB", "BBY", "BIO", "TECH", "BIIB",
-    "BLK", "BX", "BA", "BCR", "BSX", "BMY", "AVGO", "BR", "BRO", "BF.B",
-    "BLDR", "BG", "CDNS", "CZR", "CPT", "CPB", "COF", "CAH", "KMX", "CCL",
-    "CARR", "CAT", "CBOE", "CBRE", "CDW", "CE", "COR", "CNC", "CNX", "CDAY",
-    "CF", "CRL", "SCHW", "CHTR", "CVX", "CMG", "CB", "CHD", "CI", "CINF",
-    "CTAS", "CSCO", "C", "CFG", "CLX", "CME", "CMS", "KO", "CTSH", "CL",
-    "CMCSA", "CAG", "COP", "ED", "STZ", "CEG", "COO", "CPRT", "GLW", "CPAY",
-    "CTVA", "CSGP", "COST", "CTRA", "CRWD", "CSX", "CMI", "CVS", "DHR", "DRI",
-    "DVA", "DAY", "DECK", "DE", "DELL", "DAL", "DVN", "DXCM", "FANG", "DLR",
-    "DFS", "DG", "DLTR", "D", "DPZ", "DOV", "DOW", "DHI", "DTE", "DUK",
-    "DD", "EMN", "ETN", "EBAY", "ECL", "EIX", "EW", "EA", "ELV", "EMR",
-    "ENPH", "ETR", "EOG", "EPAM", "EQT", "EFX", "EQIX", "EQR", "ESS", "EL",
-    "ETSY", "EG", "EVRG", "ES", "EXC", "EXPE", "EXPD", "EXR", "XOM", "FFIV",
-    "FDS", "FICO", "FAST", "FRT", "FDX", "FIS", "FITB", "FSLR", "FE", "FI",
-    "FMC", "F", "FTNT", "FTV", "FOXA", "FOX", "BEN", "FCX", "GRMN", "IT",
-    "GE", "GEHC", "GEV", "GEN", "GNRC", "GD", "GIS", "GM", "GPC", "GILD",
-    "GS", "HAL", "HIG", "HAS", "HCA", "DOC", "HSIC", "HSY", "HES", "HPE",
-    "HLT", "HOLX", "HD", "HON", "HRL", "HST", "HWM", "HPQ", "HUBB", "HUM",
-    "HBAN", "HII", "IBM", "IEX", "IDXX", "ITW", "INCY", "IR", "PODD", "INTC",
-    "ICE", "IFF", "IP", "IPG", "INTU", "ISRG", "IVZ", "INVH", "IQV", "IRM",
-    "JBHT", "JBL", "JKHY", "J", "JNJ", "JCI", "JPM", "JNPR", "K", "KVUE",
-    "KDP", "KEY", "KEYS", "KMB", "KIM", "KMI", "KLAC", "KHC", "KR", "LHX",
-    "LH", "LRCX", "LW", "LVS", "LDOS", "LEN", "LIN", "LYV", "LKQ", "LMT",
-    "L", "LOW", "LULU", "LYB", "MTB", "MRO", "MPC", "MKTX", "MAR", "MMC",
-    "MLM", "MAS", "MA", "MTCH", "MKC", "MCD", "MCK", "MDT", "MRK", "META",
-    "MET", "MTD", "MGM", "MCHP", "MU", "MSFT", "MAA", "MRNA", "MHK", "MOH",
-    "TAP", "MDLZ", "MPWR", "MNST", "MCO", "MS", "MOS", "MSI", "MSCI", "NDAQ",
-    "NTAP", "NWS", "NWSA", "NEM", "NFLX", "NWL", "NI", "NDSN", "NSC", "NTRS",
-    "NOC", "NCLH", "NRG", "NUE", "NVDA", "NVR", "NXPI", "ORLY", "OXY", "ODFL",
-    "OMC", "ON", "OKE", "ORCL", "OTIS", "PCAR", "PKG", "PLTR", "PANW", "PARA",
-    "PH", "PAYX", "PAYC", "PYPL", "PNR", "PEP", "PFE", "PCG", "PM", "PSX",
-    "PNW", "PNC", "POOL", "PPG", "PPL", "PFG", "PG", "PGR", "PRU", "PLD",
-    "PRG", "PTC", "PSA", "PHM", "QRVO", "PWR", "QCOM", "DGX", "RL", "RJF",
-    "RTX", "O", "REG", "REGN", "RF", "RSG", "RMD", "RVTY", "ROK", "ROL",
-    "ROP", "ROST", "RCL", "SPGI", "CRM", "SBAC", "SLB", "STX", "SRE", "NOW",
-    "SHW", "SPG", "SWKS", "SJM", "SW", "SNA", "SOLV", "SO", "LUV", "SWK",
-    "SBUX", "STT", "STLD", "STE", "SYK", "SMCI", "SYF", "SNPS", "SYY", "TMUS",
-    "TROW", "TTWO", "TPR", "TRGP", "TGT", "TEL", "TDY", "TFX", "TER", "TSLA",
-    "TXN", "TXT", "TMO", "TJX", "TSCO", "TT", "TDG", "TRV", "TRMB", "TFC",
-    "TYL", "TSN", "USB", "UBER", "UDR", "ULTA", "UNP", "UAL", "UPS", "URI",
-    "UNH", "UHS", "VLO", "VTR", "VLTO", "VRSN", "VRSK", "VZ", "VRTX", "VIAV",
-    "VST", "V", "VMC", "WRK", "WAB", "WBA", "WMT", "DIS", "WBD", "WM",
-    "WAT", "WEC", "WFC", "WELL", "WST", "WDC", "WY", "WMB", "WTW", "GWW",
-    "WYNN", "XEL", "XYL", "YUM", "ZBRA", "ZBH", "ZTS",
+# ── Russell 1000 成分股 ───────────────────────────────────────────────────────
+RUSSELL1000 = [
+    "A", "AAL", "AAP", "AAPL", "ABBV", "ABNB", "ABT", "ACHC", "ACN", "ADBE",
+    "ADC", "ADI", "ADP", "AEE", "AEO", "AEP", "AES", "AFL", "AIZ", "AJG",
+    "AKAM", "ALB", "ALGN", "ALK", "ALL", "ALLE", "ALLY", "AMAT", "AMD", "AME",
+    "AMG", "AMGN", "AMT", "AMZN", "AN", "ANF", "ANSS", "AON", "AOS", "APA",
+    "APD", "APO", "APTV", "AR", "ARE", "ARES", "ANET", "ATMU", "ATO", "ATI",
+    "AVB", "AVGO", "AVT", "AVTR", "AVY", "AWK", "AX", "AXON", "AXP", "AYI",
+    "AZO", "AZZ",
+    "BA", "BAC", "BALL", "BAX", "BBY", "BDX", "BEN", "BJ", "BJRI", "BK",
+    "BKH", "BKR", "BLK", "BLMN", "BLDR", "BLK", "BMY", "BMRN", "BKNG",
+    "BOOT", "BOX", "BRC", "BRBR", "BRK-B", "BRO", "BRT", "BSX", "BURL",
+    "BWA", "BX", "BXP", "BYD", "BWXT",
+    "C", "CABO", "CAG", "CAH", "CAKE", "CALX", "CARG", "CARR", "CASY",
+    "CAT", "CB", "CBOE", "CBRE", "CCK", "CDW", "CDAY", "CDMO", "CDNS",
+    "CE", "CEG", "CG", "CFG", "CF", "CHTR", "CHRW", "CHD", "CHWY",
+    "CI", "CIEN", "CINF", "CIVI", "CLF", "CLH", "CLX", "CMC", "CME",
+    "CMG", "CMI", "CMS", "CNC", "CNO", "CNS", "CNX", "CO", "COF",
+    "COHU", "COLM", "COP", "COOP", "COR", "COST", "COO", "CPB", "CPT",
+    "CR", "CG", "CRGY", "CRI", "CROX", "CRWD", "CRL", "CRM", "CSX",
+    "CTSH", "CTVA", "CUBE", "CUZ", "CVS", "CVX", "CVLT", "CWT", "CZR",
+    "D", "DAL", "DAR", "DDOG", "DD", "DE", "DECK", "DG", "DHI", "DHR",
+    "DIN", "DIOD", "DIS", "DKS", "DLTR", "DKNG", "DLR", "DOW", "DPZ",
+    "DRH", "DRI", "DRVN", "DT", "DTE", "DUK", "DVA", "DVN",
+    "E", "EAT", "EBC", "ECL", "ED", "EG", "EGP", "EHC", "EIX", "EL",
+    "ELV", "EMN", "EMR", "ENS", "ENPH", "EPC", "EPAM", "EPRT", "EQR",
+    "EQIX", "EQT", "ERIE", "ESE", "ESS", "ETN", "ETSY", "ETR", "EVR",
+    "EVRG", "EW", "EXC", "EXPE", "EXPD", "EXP",
+    "F", "FANG", "FARO", "FAST", "FCNCA", "FDS", "FDX", "FE", "FHN",
+    "FICO", "FI", "FIS", "FITB", "FIZZ", "FL", "FLS", "FLT", "FMC",
+    "FNB", "FOX", "FOXA", "FOUR", "FRT", "FSS", "FTV", "FUL", "FUN",
+    "G", "GATX", "GBCI", "GD", "GDDY", "GE", "GEV", "GFF", "GFS",
+    "GFI", "GIII", "GILD", "GIS", "GME", "GM", "GMS", "GOOG", "GOOGL",
+    "GPS", "GPRE", "GPC", "GPN", "GS", "GSK", "GTX", "GWW", "GXO",
+    "HA", "HAL", "HALO", "HAS", "HBAN", "HCA", "HCC", "HD", "HEES",
+    "HES", "HGV", "HIG", "HII", "HIW", "HLT", "HMN", "HNI", "HON",
+    "HOLX", "HOMB", "HRL", "HST", "HSIC", "HUBS", "HUM", "HXL", "HZO",
+    "IBM", "IBP", "ICE", "IDA", "IDEX", "IDXX", "IEX", "IFF", "ILMN",
+    "INCY", "INDB", "INTC", "INTU", "INVH", "IONS", "IPGP", "IQV",
+    "IR", "IRDM", "IRM", "ISRG", "ITW", "IVZ",
+    "JACK", "JBHT", "JELD", "JCI", "JLL", "JKHY", "JNJ", "JNPR",
+    "JPM", "JWN",
+    "K", "KALU", "KBH", "KEY", "KFRC", "KIM", "KKR", "KMI", "KMT",
+    "KNX", "KNSL", "KO", "KR", "KDP", "KHC", "KMPR",
+    "L", "LBRT", "LCII", "LEA", "LEN", "LGIH", "LH", "LHX", "LII",
+    "LIN", "LKQ", "LMT", "LNN", "LNTH", "LOPE", "LOW", "LPX",
+    "LRCX", "LSTR", "LULU", "LUV", "LVS", "LW", "LXP", "LYB", "LZB", "LYV",
+    "M", "MA", "MAR", "MAS", "MAT", "MATX", "MCK", "MCO", "MCD",
+    "MCHP", "MCY", "MDT", "MDU", "MEDP", "META", "MET", "MGEE",
+    "MGNI", "MGM", "MHO", "MKC", "MKTX", "MLM", "MMC", "MMM",
+    "MMS", "MNK", "MNRO", "MO", "MOH", "MOS", "MOG-A", "MPC",
+    "MPWR", "MRC", "MRK", "MRO", "MS", "MSA", "MSCI", "MSFT",
+    "MTRN", "MTX", "MU", "MUR", "MVF",
+    "NDAQ", "NBTB", "NCR", "NCLH", "NDSN", "NEE", "NEM", "NET",
+    "NHI", "NI", "NKE", "NMI", "NMIH", "NOC", "NSA", "NSC", "NSIT",
+    "NTAP", "NUE", "NUS", "NVR", "NXPI",
+    "O", "ODFL", "OFG", "OGS", "OHI", "OI", "OKE", "OLLI",
+    "OMCL", "OMC", "ONON", "OPCH", "ORCL", "ORLY", "OSIS", "OSK",
+    "OTIS", "OTTR", "OXY",
+    "PANW", "PARA", "PATK", "PAYX", "PBI", "PCAR", "PCTY", "PDC",
+    "PFE", "PFGC", "PH", "PHIN", "PHM", "PIPR", "PKG", "PLD",
+    "PLTR", "PLXS", "PM", "PNC", "PNFP", "POOL", "POST", "PPG",
+    "PPL", "PRGO", "PRU", "PSA", "PSX", "PTC", "PVH", "PYPL",
+    "QSR", "QLYS", "QCOM", "QRVO", "QTWO",
+    "R", "RBC", "RCL", "RDN", "RDNT", "REG", "REGN", "REZI",
+    "RF", "RJF", "RLI", "RL", "RMR", "ROAD", "ROCK", "ROK",
+    "ROL", "ROIC", "ROST", "RPM", "RS", "RSG", "RTX", "RRR",
+    "RXO", "RYN",
+    "SAIA", "SBAC", "SBRA", "SBCF", "SBSI", "SCHW", "SCI", "SCSC",
+    "SEDG", "SEM", "SEE", "SF", "SFNC", "SGRY", "SHO", "SHW",
+    "SIG", "SITC", "SIRI", "SIX", "SKT", "SKX", "SKYW", "SLGN",
+    "SLB", "SLM", "SNOW", "SNBR", "SOLV", "SON", "SONO", "SO",
+    "SPG", "SPR", "SPXC", "SRCL", "SRE", "SSD", "SSB",
+    "STT", "STC", "STLD", "STNG", "STRA", "STX", "SWK", "SWX",
+    "SXT", "SYF", "SYY",
+    "T", "TAP", "TDG", "TDOC", "TEAM", "TEX", "TFC", "TFX",
+    "TGT", "THC", "THRY", "TILE", "TJX", "TMO", "TMUS", "TNC",
+    "TOL", "TOWN", "TPR", "TRGP", "TRMB", "TRN", "TRV", "TRTX",
+    "TRUP", "TSCO", "TSLA", "TTGT", "TTMI", "TT", "TXN",
+    "TXRH",
+    "UAL", "UCB", "UFI", "UFPI", "UHS", "UMBF", "UNF", "UNH",
+    "UNP", "UNVR", "UPS", "URI", "USB", "UDR", "UVV",
+    "V", "VAC", "VFC", "VIAV", "VICR", "VIRT", "VMC", "VNOM",
+    "VSEC", "VSTS", "VTR", "VVV", "VZ",
+    "W", "WAB", "WAT", "WBA", "WBD", "WDAY", "WDC", "WDFC",
+    "WEC", "WELL", "WEN", "WEX", "WFC", "WM", "WMB", "WMT",
+    "WOLF", "WOR", "WRLD", "WMS", "WSO", "WTW", "WTS", "WWW",
+    "XPEL", "XHR", "XOM", "XPO", "XRAY", "XRX",
+    "YELP", "YETI", "YUM",
+    "Z", "ZBH", "ZI", "ZION", "ZS",
 ]
 
 # ── 核心计算函数 ───────────────────────────────────────────────────────────────
@@ -284,14 +323,14 @@ def compute_recommendation(ticker_symbol):
 
 # ── 批量扫描 ──────────────────────────────────────────────────────────────────
 
-def scan_all(tickers=SP500, max_workers=4):
+def scan_all(tickers=RUSSELL1000, max_workers=4):
     results_all = []
     errors      = []
     passed      = []
     total       = len(tickers)
 
     print(f"\n{'='*60}")
-    print(f"  S&P500 期权扫描器  |  共 {total} 只股票")
+    print(f"  Russell 1000 期权扫描器  |  共 {total} 只股票")
     print(f"  扫描条件：avg_volume ✓  iv30_rv30 ✓  ts_slope_0_45 ✓")
     print(f"{'='*60}\n")
 
@@ -412,17 +451,12 @@ def build_email_html(passed, results_all, scan_time):
             </tr>
           </thead><tbody>"""
         for i, r in enumerate(sorted(rows, key=lambda x: x['iv30_rv30_val'], reverse=True)):
-            # 财报时间标签颜色
             etime = r.get('earnings_time', 'Unknown')
             etime_color = '#1a6600' if etime == 'BMO' else '#990000' if etime == 'AMC' else '#888888'
-            etime_label = etime
-
-            # 未确认标注
             edate_str = r.get('earnings_date', 'N/A')
             confirmed  = r.get('earnings_confirmed', True)
             edate_label = edate_str if confirmed else f"{edate_str} ⚠️未确认"
             edate_color = '#000' if confirmed else '#cc6600'
-
             html += f"""
             <tr style='background:{row_color(i)}'>
               <td style='padding:7px 12px;font-weight:bold'>{r['ticker']}</td>
@@ -431,7 +465,7 @@ def build_email_html(passed, results_all, scan_time):
               <td style='padding:7px 12px;text-align:right'>{r['ts_slope_val']:.6f}</td>
               <td style='padding:7px 12px;text-align:right'>{r['expected_move']}</td>
               <td style='padding:7px 12px;text-align:center;color:{edate_color}'>{edate_label}</td>
-              <td style='padding:7px 12px;text-align:center;font-weight:bold;color:{etime_color}'>{etime_label}</td>
+              <td style='padding:7px 12px;text-align:center;font-weight:bold;color:{etime_color}'>{etime}</td>
             </tr>"""
         html += "</tbody></table>"
         return html
@@ -460,14 +494,12 @@ def build_email_html(passed, results_all, scan_time):
     html = f"""
     <!DOCTYPE html><html><body style='font-family:Arial,sans-serif;max-width:760px;margin:0 auto;padding:20px;color:#222;background:#fafafa'>
 
-      <!-- 顶部 Banner：财报主题深琥珀色 -->
       <div style='background:linear-gradient(135deg,#7b3f00,#c0620a);color:#fff;padding:22px 28px;border-radius:10px 10px 0 0'>
         <div style='font-size:11px;letter-spacing:2px;text-transform:uppercase;opacity:0.75;margin-bottom:6px'>Earnings Calendar Spread Scanner</div>
-        <h1 style='margin:0;font-size:22px;font-weight:700'>📅 S&P500 财报期权扫描报告</h1>
+        <h1 style='margin:0;font-size:22px;font-weight:700'>📅 Russell 1000 财报期权扫描报告</h1>
         <p style='margin:8px 0 0;opacity:0.8;font-size:13px'>{date_str} {time_str} 北京时间 · 财报窗口：1-3天内 · 共 {total} 只有效数据</p>
       </div>
 
-      <!-- 财报说明条 -->
       <div style='background:#fff3e0;padding:12px 28px;border-left:5px solid #c0620a;font-size:13px;color:#7b3f00'>
         🔔 <b>策略提示：</b>以下标的均在 <b>1-3天内有财报</b>，同时满足期权扫描条件，适合评估日历价差机会。
         <span style='margin-left:16px'>
@@ -477,7 +509,6 @@ def build_email_html(passed, results_all, scan_time):
         </span>
       </div>
 
-      <!-- 条件统计 -->
       <div style='background:#fff8f0;padding:14px 28px;border-left:5px solid #e0a060;font-size:13px'>
         <b>条件通过统计</b>　　
         成交量 ≥150万: <b>{v_pass}</b> 只　
@@ -485,7 +516,6 @@ def build_email_html(passed, results_all, scan_time):
         TS斜率 ≤-0.00406: <b>{t_pass}</b> 只
       </div>
 
-      <!-- 全满足 -->
       <div style='background:#fff;border:1px solid #e8d5c0;border-radius:6px;padding:20px 24px;margin-top:16px'>
         <h2 style='color:#7b3f00;border-bottom:2px solid #c0620a;padding-bottom:8px;margin-top:0;font-size:16px'>
           ✅ 满足全部三项条件 — {len(passed)} 只
@@ -493,7 +523,6 @@ def build_email_html(passed, results_all, scan_time):
         {result_table(passed) if passed else "<p style='color:#aaa;font-style:italic'>今日无满足全部条件且有近期财报的股票</p>"}
       </div>
 
-      <!-- 两项满足 -->
       <div style='background:#fff;border:1px solid #e8d5c0;border-radius:6px;padding:20px 24px;margin-top:12px'>
         <h2 style='color:#b8860b;border-bottom:2px solid #e0a060;padding-bottom:8px;margin-top:0;font-size:16px'>
           🟡 满足两项条件
@@ -501,7 +530,6 @@ def build_email_html(passed, results_all, scan_time):
         {two_sections if two_sections else "<p style='color:#aaa;font-style:italic'>今日无满足两项条件的股票</p>"}
       </div>
 
-      <!-- 免责声明 -->
       <div style='background:#fff3e0;border:1px solid #f5c992;padding:12px 16px;border-radius:4px;font-size:11px;color:#888;margin-top:16px'>
         ⚠️ 免责声明：本报告仅供学习研究目的，不构成任何投资建议。请在做出任何投资决策前咨询专业金融顾问。
       </div>
@@ -514,9 +542,9 @@ def send_email(passed, results_all, scan_time):
     subject_prefix, html_body = build_email_html(passed, results_all, scan_time)
     date_str = scan_time.strftime('%Y-%m-%d')
     if passed:
-        subject = f"⚠️ IMPORTANT | {subject_prefix} | S&P500财报期权扫描 {date_str}"
+        subject = f"⚠️ IMPORTANT | {subject_prefix} | Russell1000财报期权扫描 {date_str}"
     else:
-        subject = f"📅 S&P500财报期权扫描 {date_str} | 今日无全满足"
+        subject = f"📅 Russell1000财报期权扫描 {date_str} | 今日无全满足"
 
     msg = MIMEMultipart("alternative")
     msg["Subject"] = subject
